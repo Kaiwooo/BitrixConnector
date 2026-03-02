@@ -1,4 +1,4 @@
-from client.call import call
+from Bitrix.call import call
 from fastapi import APIRouter, Request
 import logging
 
