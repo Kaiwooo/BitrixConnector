@@ -5,22 +5,14 @@ from storage import load_config
 router = APIRouter()
 
 @router.post("")
-async def connector_reg(request: Request):
+async def connector_list(request: Request):
     apps = load_config()
     if not apps:
         return {"status": "error", "msg": "OAuth not installed"}
 
-    try:
-        params = await request.json()
-    except Exception:
-        return {"status": "error", "msg": "Invalid JSON body"}
-
-    if not params:
-        return {"status": "error", "msg": "Empty body"}
-
     auth = next(iter(apps.items()))
 
-    result = await call("imconnector.register", params, auth)
+    result = await call("imconnector.list", auth)
 
     return {
         "status": "ok",
