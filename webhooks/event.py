@@ -28,4 +28,10 @@ async def event(request: Request):
 
     event_type = data.get("event")
 
+    if event_type == "ONIMCONNECTORMESSAGEADD":
+        message = data.get("data[MESSAGE][text]")
+        chat_id = data.get("data[MESSAGE][chat][id]")
+
+        logging.info(f"Новое сообщение: {message} | chat: {chat_id}")
+
     return {"status": "ok"}
