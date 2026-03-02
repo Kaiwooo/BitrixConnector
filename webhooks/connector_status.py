@@ -10,9 +10,14 @@ async def connector_reg(request: Request):
     if not apps:
         return {"status": "error", "msg": "OAuth not installed"}
 
+    try:
+        params = await request.json()
+    except Exception:
+        return {"status": "error", "msg": "Invalid JSON body"}
+
     _, auth = next(iter(apps.items()))
 
-    result = await call("imconnector.status", {}, auth)
+    result = await call("imconnector.status", params, auth)
 
     return {
         "status": "ok",
