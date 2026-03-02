@@ -18,9 +18,9 @@ async def connector_reg(request: Request):
     if not params:
         return {"status": "error", "msg": "Empty body"}
 
-    auth = next(iter(apps.items()))
+    _, auth = next(iter(apps.items()))
 
-    result = await call("imconnector.register", params, auth)
+    result = await call("imconnector.unregister", params, auth)
 
     return {
         "status": "ok",

@@ -10,9 +10,9 @@ async def connector_list(request: Request):
     if not apps:
         return {"status": "error", "msg": "OAuth not installed"}
 
-    auth = next(iter(apps.items()))
+    _, auth = next(iter(apps.items()))
 
-    result = await call("imconnector.list", auth)
+    result = await call("imconnector.list", {}, auth)
 
     return {
         "status": "ok",

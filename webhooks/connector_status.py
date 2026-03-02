@@ -7,10 +7,12 @@ router = APIRouter()
 @router.post("")
 async def connector_reg(request: Request):
     apps = load_config()
+    if not apps:
+        return {"status": "error", "msg": "OAuth not installed"}
 
-    auth = next(iter(apps.items()))
+    _, auth = next(iter(apps.items()))
 
-    result = await call("imconnector.register", params, auth)
+    result = await call("imconnector.status", {}, auth)
 
     return {
         "status": "ok",
