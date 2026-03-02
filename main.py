@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from webhooks import install, event, connector_reg, connector_activate, connector_unreg, connector_list, connector_status
+from webhooks import install, event, connector_reg, connector_activate, connector_unreg, connector_list, connector_status, openlines
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -13,3 +13,4 @@ app.include_router(connector_activate.router, prefix="/connactivate")
 app.include_router(connector_unreg.router, prefix="/connunreg")
 app.include_router(connector_list.router, prefix="/connlist")
 app.include_router(connector_status.router, prefix="/connstatus")
+app.include_router(openlines.router, prefix="/openlines")
