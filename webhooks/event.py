@@ -23,6 +23,10 @@ async def event(request: Request):
 
     log_dict(logger, {"Inbound Event": data})
 
+    if data.get("PLACEMENT"):
+        logger.info(f"Placement call: {data.get('PLACEMENT')}")
+        return {"status": "ok"}
+
     auth = extract_auth(data)
     event_type = data.get("event")
 
