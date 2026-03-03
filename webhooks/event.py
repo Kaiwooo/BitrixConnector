@@ -1,5 +1,5 @@
 import logging
-from client.call import call
+#from client.call import call
 from fastapi import APIRouter, Request
 from utils.auth_helper import extract_auth
 from utils.logging_helper import log_dict
@@ -7,10 +7,11 @@ from utils.logging_helper import log_dict
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-async def handler_onimconnectormessageadd(data: dict):
+async def handler_onimconnectormessageadd(data: dict, auth: dict):
     message = data.get("data[MESSAGE][text]")
     chat_id = data.get("data[MESSAGE][chat][id]")
-
+    if message and chat_id:
+        logging.info(f"Новое сообщение: {message} | chat: {chat_id}")
 
 @router.post("")
 async def event(request: Request):
@@ -23,6 +24,10 @@ async def event(request: Request):
     log_dict(logger, {"Inbound Event": data})
 
     auth = extract_auth(data)
+    if not auth:
+        logger.error("❌ Auth не найден")
+        return {"status": "error", "msg": "auth not found"}
+
     event_type = data.get("event")
 
     handlers = {
@@ -31,14 +36,8 @@ async def event(request: Request):
     handler = handlers.get(event_type)
 
     if handler:
-        await handler()
+        await handler(data, auth)
     else:
         log_dict(logger, {"Inbound Event": data})
-
-    if event_type == "ONIMCONNECTORMESSAGEADD":
-        message = data.get("data[MESSAGE][text]")
-        chat_id = data.get("data[MESSAGE][chat][id]")
-
-        logging.info(f"Новое сообщение: {message} | chat: {chat_id}")
 
     return {"status": "ok"}
