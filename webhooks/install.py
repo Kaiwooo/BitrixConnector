@@ -2,6 +2,7 @@ import logging
 from fastapi import APIRouter, Request
 from storage import load_config, save_config
 from utils.logging_helper import log_dict
+from utils.auth_helper import extract_auth
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -16,17 +17,11 @@ async def install(request: Request):
     log_dict(logger, data)
 
     auth = {}
-    for k, v in data.items():
-        if k.startswith("auth[") and k.endswith("]"):
-            auth[k[5:-1]] = v
-    if not auth:
-        logging.error("❌ Auth не найден")
-        return {"Status": "Error", "Response": "Auth not found"}
+    extract_auth(auth)
 
     apps = load_config()
     apps[auth["application_token"]] = auth
     save_config(apps)
-    log_dict(logger, auth)
 
-    logging.info("✅ OAuth сохранён в конфиг")
-    return {"Status": "OK"}
+    logger.info("✅ OAuth сохранён в конфиг")
+    return {"Status": "Ok"}

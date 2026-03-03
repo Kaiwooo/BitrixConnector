@@ -1,7 +1,9 @@
 import httpx
+import logging
 from client.refresh_token import refresh_token
 from storage import load_config, save_config
-from config import DEBUG
+
+logger = logging.getLogger(__name__)
 
 async def call(method: str, params: dict, auth: dict, app_token: str = None):
     """
@@ -14,8 +16,8 @@ async def call(method: str, params: dict, auth: dict, app_token: str = None):
     url = f"{auth['client_endpoint']}{method}"
     params["auth"] = auth["access_token"]
 
-    if DEBUG:
-        print("REST CALL:", url, params)
+    logger.debug(f"REST CALL: {url} | params={params}")
+    logger.debug(f"params={params}")
 
     async with httpx.AsyncClient() as client:
         resp = await client.post(url, data=params)
@@ -23,8 +25,7 @@ async def call(method: str, params: dict, auth: dict, app_token: str = None):
 
     # Проверка на устаревший или недействительный токен
     if "error" in result and result["error"] in ("expired_token", "invalid_token"):
-        if DEBUG:
-            print("Token expired, refreshing...")
+        logger.debug("Token expired, refreshing...")
         new_auth = await refresh_token(auth)
         if new_auth and app_token:
             # Сохраняем обновленный токен в конфиг
@@ -38,7 +39,5 @@ async def call(method: str, params: dict, auth: dict, app_token: str = None):
                 resp = await client.post(url, data=params)
                 result = resp.json()
         else:
-            if DEBUG:
-                print("Token refresh failed or no app_token provided")
-
+            logger.debug(f"Token refresh failed or no app_token provided")
     return result

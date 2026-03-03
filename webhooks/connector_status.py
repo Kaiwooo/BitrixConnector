@@ -16,11 +16,11 @@ async def connector_status(request: Request):
     try:
         params = await request.json()
     except Exception:
-        return {"status": "error", "msg": "Invalid JSON body"}
+        return {"Status": "Error", "Message": "Invalid JSON body"}
 
     _, auth = next(iter(apps.items()))
     result = await call("imconnector.status", params, auth)
     log_dict(logger, result)
     return {
-        "Bitrix response": result
+        "Bitrix Response": result
     }

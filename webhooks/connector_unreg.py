@@ -16,14 +16,14 @@ async def connector_unreg(request: Request):
     try:
         params = await request.json()
     except Exception:
-        return {"status": "error", "msg": "Invalid JSON body"}
+        return {"Status": "Error", "Message": "Invalid JSON body"}
 
     if not params:
-        return {"status": "error", "msg": "Empty body"}
+        return {"Status": "Error", "Message": "Empty body"}
 
     _, auth = next(iter(apps.items()))
     result = await call("imconnector.unregister", params, auth)
     log_dict(logger, result)
     return {
-        "Bitrix response": result
+        "Bitrix Response": result
     }

@@ -17,5 +17,5 @@ async def connector_list():
     result = await call("imconnector.list", {}, auth)
     log_dict(logger, result)
     return {
-        "Bitrix response": result
+        "Bitrix Response": result
     }

@@ -11,7 +11,7 @@ async def handler_onimconnectormessageadd(data: dict, auth: dict):
     message = data.get("data[MESSAGE][text]")
     chat_id = data.get("data[MESSAGE][chat][id]")
     if message and chat_id:
-        logging.info(f"Новое сообщение: {message} | chat: {chat_id}")
+        logger.info(f"Новое сообщение: {message} | chat: {chat_id}")
 
 @router.post("")
 async def event(request: Request):
@@ -24,10 +24,6 @@ async def event(request: Request):
     log_dict(logger, {"Inbound Event": data})
 
     auth = extract_auth(data)
-    if not auth:
-        logger.error("❌ Auth не найден")
-        return {"status": "error", "msg": "auth not found"}
-
     event_type = data.get("event")
 
     handlers = {
@@ -40,4 +36,4 @@ async def event(request: Request):
     else:
         log_dict(logger, {"Inbound Event": data})
 
-    return {"status": "ok"}
+    return {"Status": "Ok"}
