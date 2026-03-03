@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from Bitrix.call import call
+from client.call import call
 from storage import load_config
 
 router = APIRouter()

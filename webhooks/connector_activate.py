@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from Bitrix.call import call
+from client.call import call
 from storage import load_config
 
 router = APIRouter()
@@ -18,7 +18,10 @@ async def connector_activate(request: Request):
     if not params:
         return {"status": "error", "msg": "Empty body"}
 
-    _, auth = next(iter(apps.items()))
+    auth = extract_auth(data)
+    if not auth:
+        logging.error("❌ Auth не найден")
+        return {"status": "error", "msg": "auth not found"}
 
     try:
         result = await call("imconnector.activate", params, auth)

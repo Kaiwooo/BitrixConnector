@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Request
-from Bitrix.call import call
+from client.call import call
 from storage import load_config
 
 router = APIRouter()
 
 @router.post("")
-async def connector_reg(request: Request):
+async def connector_status(request: Request):
     apps = load_config()
     if not apps:
         return {"status": "error", "msg": "OAuth not installed"}

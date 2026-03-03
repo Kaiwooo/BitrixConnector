@@ -1,36 +1,33 @@
 import logging
 from fastapi import APIRouter, Request
 from storage import load_config, save_config
+from utils.logging_helper import log_dict
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
 @router.post("")
 async def install(request: Request):
-    raw = await request.body()
-    logging.info(f"RAW INSTALL BODY: {raw.decode(errors='ignore')}")
-
     try:
         data = await request.json()
     except Exception:
         form = await request.form()
         data = dict(form)
+    log_dict(logger, data)
 
-    # Извлекаем auth
     auth = {}
     for k, v in data.items():
         if k.startswith("auth[") and k.endswith("]"):
             auth[k[5:-1]] = v
-
     if not auth:
         logging.error("❌ Auth не найден")
-        return {"status": "error", "msg": "auth not found"}
+        return {"Status": "Error", "Response": "Auth not found"}
 
     apps = load_config()
-    apps[auth["application_token"]] = auth  # вместо {"AUTH": auth}
+    apps[auth["application_token"]] = auth
     save_config(apps)
+    log_dict(logger, auth)
 
     logging.info("✅ OAuth сохранён в конфиг")
-
-    return {"status": "ok"}
+    return {"Status": "OK"}
