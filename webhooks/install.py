@@ -16,8 +16,7 @@ async def install(request: Request):
         data = dict(form)
     log_dict(logger, data)
 
-    auth = {}
-    extract_auth(auth)
+    auth = extract_auth(data)
 
     apps = load_config()
     apps[auth["application_token"]] = auth
