@@ -7,7 +7,7 @@ from utils.logging_helper import log_dict
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-async def handler_onimconnectormessageadd(data: dict, auth: dict):
+async def handler_onimconnectormessageadd(data: dict):
     message = data.get("data[MESSAGE][text]")
     chat_id = data.get("data[MESSAGE][chat][id]")
     if message and chat_id:
@@ -27,7 +27,7 @@ async def event(request: Request):
         logger.info(f"Placement call: {data.get('PLACEMENT')}")
         return {"status": "ok"}
 
-    auth = extract_auth(data)
+    #auth = extract_auth(data)
     event_type = data.get("event")
 
     handlers = {
@@ -36,8 +36,8 @@ async def event(request: Request):
     handler = handlers.get(event_type)
 
     if handler:
-        await handler(data, auth)
+        await handler(data)
     else:
         log_dict(logger, {"Inbound Event": data})
 
-    return {"Status": "Ok"}
+    return {"Status": "ok"}
