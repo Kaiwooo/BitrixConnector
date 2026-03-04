@@ -25,7 +25,7 @@ async def event(request: Request):
 
     if data.get("PLACEMENT"):
         logger.info(f"Placement call: {data.get('PLACEMENT')}")
-        return {"status": "ok"}
+        return {"status": "success"}
 
     #auth = extract_auth(data)
     event_type = data.get("event")
