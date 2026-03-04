@@ -25,7 +25,7 @@ async def event(request: Request):
 
     if data.get("PLACEMENT"):
         logger.info(f"Placement call: {data.get('PLACEMENT')}")
-        return {"status": "success"}
+        return
 
     #auth = extract_auth(data)
     event_type = data.get("event")
@@ -40,4 +40,4 @@ async def event(request: Request):
     else:
         log_dict(logger, {"Inbound Event": data})
 
-    return {"Status": "ok"}
+    return
