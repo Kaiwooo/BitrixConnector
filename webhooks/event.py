@@ -26,6 +26,9 @@ async def event(request: Request):
     if data.get("PLACEMENT"):
         logger.info(f"Placement call: {data.get('PLACEMENT')}")
         return
+    if data.get("SETTING_CONNECTOR"):
+        logger.info(f"Setting connector call: {data.get('SETTING_CONNECTOR')}")
+        return
 
     #auth = extract_auth(data)
     event_type = data.get("event")
