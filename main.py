@@ -1,6 +1,6 @@
 import logging
 from fastapi import FastAPI
-from webhooks import install, event, connector_reg, connector_activate, connector_unreg, connector_list, connector_status, openlines, bitrix
+from webhooks import install, event, connector_reg, connector_activate, connector_unreg, connector_list, connector_status, openlines, curl
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -14,4 +14,4 @@ app.include_router(connector_unreg.router, prefix="/connunreg")
 app.include_router(connector_list.router, prefix="/connlist")
 app.include_router(connector_status.router, prefix="/connstatus")
 app.include_router(openlines.router, prefix="/openlines")
-app.include_router(bitrix.router, prefix="/bitrix")
+app.include_router(curl.router, prefix="/curl")
