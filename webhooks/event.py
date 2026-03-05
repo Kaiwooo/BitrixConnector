@@ -1,17 +1,17 @@
 import logging
-#from client.call import call
 from fastapi import APIRouter, Request
-from utils.auth_helper import extract_auth
 from utils.logging_helper import log_dict
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
 async def handler_onimconnectormessageadd(data: dict):
-    message = data.get("data[MESSAGE][text]")
-    chat_id = data.get("data[MESSAGE][chat][id]")
+    msg = data["data"]["MESSAGES"][0]
+    message = msg("data[MESSAGE][0][text]")
+    chat_id = msg("data[MESSAGE][0][chat][id]")
     if message and chat_id:
         logger.info(f"Новое сообщение: {message} | chat: {chat_id}")
+    return {"Success": True}
 
 @router.post("")
 async def event(request: Request):
@@ -21,13 +21,6 @@ async def event(request: Request):
         form = await request.form()
         data = dict(form)
 
-    log_dict(logger, {"Inbound Event": data})
-
-    if data.get("PLACEMENT"):
-        logger.info(f"Placement call: {data.get('PLACEMENT')}")
-        return {"status": "ok"}
-
-    #auth = extract_auth(data)
     event_type = data.get("event")
 
     handlers = {
