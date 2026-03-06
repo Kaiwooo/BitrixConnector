@@ -13,7 +13,6 @@ async def handler_onimconnectormessageadd(data: dict):
         "LINE": data.get("data[LINE]"),
         "MESSAGES[0][im][chat_id]": data.get("data[MESSAGES][0][im][chat_id]"),
         "MESSAGES[0][im][message_id]": data.get("data[MESSAGES][0][im][message_id]"),
-        #"MESSAGES[0][message][id][0]": data.get("data[MESSAGES][0][im][message_id]"),
         "MESSAGES[0][chat][id]": data.get("data[MESSAGES][0][chat][id]")
     }
     auth = {
