@@ -6,9 +6,8 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 async def handler_onimconnectormessageadd(data: dict):
-    msg = data["data"]["MESSAGES"][0]
-    message = msg("data[MESSAGE][0][text]")
-    chat_id = msg("data[MESSAGE][0][chat][id]")
+    message = data.get("data[MESSAGES][0][message][text]")
+    chat_id = data.get("data[MESSAGES][0][chat][id]")
     if message and chat_id:
         logger.info(f"Новое сообщение: {message} | chat: {chat_id}")
     return {"Success": True}
