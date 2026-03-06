@@ -21,9 +21,8 @@ async def handler_onimconnectormessageadd(data: dict):
     }
     auth = data.get("AUTH[access_token]")
     app_token = data.get("AUTH[app_token]")
-    if message and chat_id:
-        await call("imconnector.send.status.delivery", params, auth, app_token)
-    return
+    result = await call("imconnector.send.status.delivery", params, auth, app_token)
+    return result
 
 
 @router.post("")
