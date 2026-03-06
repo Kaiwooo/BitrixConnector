@@ -8,9 +8,11 @@ router = APIRouter()
 async def handler_onimconnectormessageadd(data: dict):
     message = data.get("data[MESSAGES][0][message][text]")
     chat_id = data.get("data[MESSAGES][0][chat][id]")
+    log_dict(logger, {"Inbound Event": data})
     if message and chat_id:
         logger.info(f"Новое сообщение: {message} | chat: {chat_id}")
-    return {"Success": True}
+    return
+
 
 @router.post("")
 async def event(request: Request):
