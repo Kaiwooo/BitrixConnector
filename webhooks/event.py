@@ -8,15 +8,13 @@ router = APIRouter()
 
 async def handler_onimconnectormessageadd(data: dict):
     log_dict(logger, {"Inbound Event": data})
-    connector_id = data.get("data[CONNECTOR]")
-    line_id = data.get("data[LINE]")
-    chat_id = data.get("data[MESSAGES][0][im][id]")
-    message_id = data.get("data[MESSAGES][0][im][message_id]")
     params = {
-        "CONNECTOR": connector_id,
-        "LINE": line_id,
-        "MESSAGES[0][CHAT_ID]": chat_id,
-        "MESSAGES[0][MESSAGE_ID]": message_id
+        "CONNECTOR": data.get("data[CONNECTOR]"),
+        "LINE": data.get("data[LINE]"),
+        "MESSAGES[0][im][chat_id]": data.get("data[MESSAGES][0][im][chat_id]"),
+        "MESSAGES[0][im][message_id]": data.get("data[MESSAGES][0][im][message_id]"),
+        "MESSAGES[0][message][id][0]": data.get("data[MESSAGES][0][im][message_id]"),
+        "MESSAGES[0][chat][id]": data.get("data[MESSAGES][0][chat][id]")
     }
     auth = {
         "access_token": data.get("auth[access_token]"),
